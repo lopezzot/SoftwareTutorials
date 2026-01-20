@@ -16,10 +16,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ]]
+file(GLOB _plugin_sources src/components/*.cpp)
+gaudi_add_module(IDEA_o2_drcalibration_Plugins
+                 SOURCES ${_plugin_sources}
+                 LINK Gaudi::GaudiKernel
+                      k4FWCore::k4FWCore
+                      EDM4HEP::edm4hep
+                      DD4hep::DDCore
+                      )
 
-project(GaudiTutorial LANGUAGES CXX)
-
-add_subdirectory(EventStats)
-add_subdirectory(MoliereRadiusFunctional)
-add_subdirectory(RandomNoiseDigitizer)
-add_subdirectory(IDEA_o2_drcalibration)
+install(TARGETS IDEA_o2_drcalibration_Plugins
+  EXPORT ${CMAKE_PROJECT_NAME}Targets
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME}"
+  COMPONENT dev)
