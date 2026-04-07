@@ -41,9 +41,9 @@ void readEdm4hep(const std::string& filename) {
   // define histograms
   // add more histograms as needed for your analysis
   TH1::SetDefaultSumw2(); // enable Sumw2 for all histograms
-  auto* hEnergy = new TH1F("hEnergy", "Total energy deposit;Energy (GeV);Events", 100, 0, 50.); // adjust range as needed
+  auto* hEnergy = new TH1F("hEnergy", "Total energy deposit;Energy (GeV);Events", 100, 0, 5.); // adjust range as needed
   auto* hLayerEnergySum = new TH1F("hLayerEnergySum", "Avg energy deposit for each active Layer;i-th layer;Energy (GeV)", 20, 0, 20);
-  auto* hContributionTime = new TH1F("hContributionTime", "Timing distribution of hit contributions;Time (ns);Entries", 100, 0, 10); // adjust range as needed
+  auto* hContributionTime = new TH1F("hContributionTime", "Timing distribution of hit contributions;Time (ns);Entries", 50, 0, 10); // adjust range as needed
 
   // lateral shower shape per layer
   std::vector<TH2F*> hLateralShapePerLayer;
@@ -70,20 +70,16 @@ void readEdm4hep(const std::string& filename) {
       int absLayer; /*fill me*/
       int subCellId; /*fill me*/
 
-      // Q4: how can you pick out only the hits in active layers? (hint: check the abs layer definition in the DD4hep XML file)
-      if (/*fill me*/)
-        continue; // skip non-active layers
-
       // std::cout << "Hit energy: " << hit.getEnergy() << " GeV, CellID: " << hit.getCellID()
       //           << ", CaloLayer: " << caloLayer << ", AbsLayer: " << absLayer
       //           << ", SubCellId: " << subCellId << std::endl;
 
-      // Q5: fill the histograms defined above to analyze the energy distribution, layer-wise energy sum
+      // Q4: fill the histograms defined above to analyze the energy distribution, layer-wise energy sum
 
-      // Q6: fill lateral shower shape per layer
+      // Q5: fill lateral shower shape per layer
       // Note: cellid = 10*x + y
 
-      // Q7: how to access the contributions to each hit and fill the timing distribution of contributions? (hint: check the edm4hep SimCalorimeterHit class definition for contributions)
+      // Q6: how to access the contributions to each hit and fill the timing distribution of contributions? (hint: check the edm4hep SimCalorimeterHit class definition for contributions)
       // fill timing distribution of contributions
     } // loop hits
   } // loop events
@@ -117,11 +113,7 @@ void readEdm4hep(const std::string& filename) {
 // int absLayer = decoder.get(hit.getCellID(), "abslayer");
 // int subCellId = decoder.get(hit.getCellID(), "cellid");
 
-// Q4: active layers are defined as absLayer=0 in the DD4hep XML file, so we can skip hits with absLayer=1
-// if (absLayer==1)
-//   continue; // skip non-active layers
-
-// Q5: fill histograms
+// Q4: fill histograms
 // total energy sum
 // totalEnergy += hit.getEnergy();
 // // and add to energy histogram at the end of the event loop
@@ -131,13 +123,13 @@ void readEdm4hep(const std::string& filename) {
 // hLayerEnergySum->Fill(static_cast<float>(caloLayer) + 0.5, hit.getEnergy());
 // // Note: the +0.5 is to fill the histogram bin corresponding to the integer layer number
 
-// Q6: fill lateral shower shape per layer
+// Q5: fill lateral shower shape per layer
 // int x = subCellId / 10;
 // int y = subCellId % 10;
 // unsigned int layerIndex = caloLayer - 1; // assuming caloLayer starts from 1
 // hLateralShapePerLayer[layerIndex]->Fill(static_cast<float>(x) + 0.5, static_cast<float>(y) + 0.5, hit.getEnergy());
 
-// Q7: access contributions and fill timing distribution
+// Q6: access contributions and fill timing distribution
 // for (const auto& contrib : hit.getContributions()) {
 // //   std::cout << "  Contrib energy: " << contrib.getEnergy() << " GeV, PDG: " << contrib.getPDG() << std::endl;
 //   hContributionTime->Fill(contrib.getTime(), contrib.getEnergy());
